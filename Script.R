@@ -44,8 +44,8 @@ ggsave("Triceps_BA_LR_1.png")
 OLP_plot_triceps_1 <- plot_pair_OLP(
   predictor = df$Triceps_C,
   outcome = df$Triceps_US1,
-  predictor_label = "Skinfold Triceps 1",
-  outcome_label = "Ultrasound Triceps",
+  predictor_label = "Skinfold Triceps",
+  outcome_label = "Ultrasound Triceps 1",
   SESOI_lower = -2.5,
   SESOI_upper = 2.5)
 OLP_plot_triceps_1
@@ -98,6 +98,11 @@ olp_validity_triceps_1
 icc_triceps_1 <- df %>% select(c("Triceps_C","Triceps_US1"))
 icc(icc_triceps_1, model = "twoway", type = "agreement", unit = "average")
 
+## Pearsons Correlation
+library(stats)
+cor_triceps_1 <- cor.test(df$Triceps_C,df$Triceps_US1,
+                               method = "pearson",alternative = "two.sided")
+cor_triceps_1
 
 ###############TRICEPS 2 ########################
 
@@ -124,8 +129,8 @@ ggsave("Triceps_BA_LR_2.png")
 OLP_plot_triceps_2 <- plot_pair_OLP(
   predictor = df$Triceps_C,
   outcome = df$Triceps_US2,
-  predictor_label = "Skinfold Triceps 2",
-  outcome_label = "Ultrasound Triceps",
+  predictor_label = "Skinfold Triceps",
+  outcome_label = "Ultrasound Triceps 2",
   SESOI_lower = -2.5,
   SESOI_upper = 2.5)
 OLP_plot_triceps_2
@@ -178,7 +183,9 @@ olp_validity_triceps_2
 icc_triceps_2 <- df %>% select(c("Triceps_C","Triceps_US2"))
 icc(icc_triceps_2, model = "twoway", type = "agreement", unit = "average")
 
-
+cor_triceps_2 <- cor.test(df$Triceps_C,df$Triceps_US2,
+                          method = "pearson",alternative = "two.sided")
+cor_triceps_2
 
 ###############Subscapular 1 ########################
 
@@ -205,8 +212,8 @@ ggsave("Subscapular_BA_LR_1.png")
 OLP_plot_Subscapular_1 <- plot_pair_OLP(
   predictor = df$Subscapular_C,
   outcome = df$Subscapular_US1,
-  predictor_label = "Skinfold Subscapular 1",
-  outcome_label = "Ultrasound Subscapular",
+  predictor_label = "Skinfold Subscapular",
+  outcome_label = "Ultrasound Subscapular 1",
   SESOI_lower = -2.5,
   SESOI_upper = 2.5)
 OLP_plot_Subscapular_1
@@ -259,6 +266,9 @@ olp_validity_subscapular_1
 icc_subscapular_1 <- df %>% select(c("Subscapular_C","Subscapular_US1"))
 icc(icc_subscapular_1, model = "twoway", type = "agreement", unit = "average")
 
+cor_subscapular_1 <- cor.test(df$Subscapular_C,df$Subscapular_US1,
+                          method = "pearson",alternative = "two.sided")
+cor_subscapular_1
 
 ###############Subscapular 2 ########################
 
@@ -285,8 +295,8 @@ ggsave("Subscapular_BA_LR_2.png")
 OLP_plot_Subscapular_2 <- plot_pair_OLP(
   predictor = df$Subscapular_C,
   outcome = df$Subscapular_US2,
-  predictor_label = "Skinfold Subscapular 2",
-  outcome_label = "Ultrasound Subscapular",
+  predictor_label = "Skinfold Subscapular",
+  outcome_label = "Ultrasound Subscapular 2",
   SESOI_lower = -2.5,
   SESOI_upper = 2.5)
 OLP_plot_Subscapular_2
@@ -339,7 +349,9 @@ olp_validity_subscapular_2
 icc_subscapular_2 <- df %>% select(c("Subscapular_C","Subscapular_US2"))
 icc(icc_subscapular_2, model = "twoway", type = "agreement", unit = "average")
 
-
+cor_subscapular_2 <- cor.test(df$Subscapular_C,df$Subscapular_US2,
+                              method = "pearson",alternative = "two.sided")
+cor_subscapular_2
 ###############Bicep 1 ########################
 
 ## BLAND ALTMAN basic
@@ -364,8 +376,8 @@ ggsave("Bicep_BA_LR_1.png")
 OLP_plot_bicep_1 <- plot_pair_OLP(
   predictor = df$Bicep_C,
   outcome = df$Bicep_US1,
-  predictor_label = "Skinfold Bicep 1",
-  outcome_label = "Ultrasound Bicep",
+  predictor_label = "Skinfold Bicep",
+  outcome_label = "Ultrasound Bicep 1",
   SESOI_lower = -2.5,
   SESOI_upper = 2.5)
 OLP_plot_Subscapular_1
@@ -418,6 +430,9 @@ olp_validity_bicep_1
 icc_bicep_1 <- df %>% select(c("Bicep_C","Bicep_US1"))
 icc(icc_bicep_1, model = "twoway", type = "agreement", unit = "average")
 
+cor_bicep_1 <- cor.test(df$Bicep_C,df$Bicep_US1,
+                              method = "pearson",alternative = "two.sided")
+cor_bicep_1
 
 #####################BICEP 2 ###############################
 ## BLAND ALTMAN basic
@@ -443,8 +458,8 @@ ggsave("Bicep_BA_LR_2.png")
 OLP_plot_bicep_2 <- plot_pair_OLP(
   predictor = df$Bicep_C,
   outcome = df$Bicep_US2,
-  predictor_label = "Skinfold Bicep 2",
-  outcome_label = "Ultrasound Bicep",
+  predictor_label = "Skinfold Bicep",
+  outcome_label = "Ultrasound Bicep 2",
   SESOI_lower = -2.5,
   SESOI_upper = 2.5)
 OLP_plot_bicep_2
@@ -484,7 +499,7 @@ OLP_bicep_2 <- function(data=df,
 
 olp_validity_bicep_2 <- validity_analysis(
   data = df,
-  criterion = "Bicep_US1",
+  criterion = "Bicep_US2",
   practical = "Bicep_C",
   SESOI_lower = -2.5,
   SESOI_upper = 2.5,
@@ -497,6 +512,9 @@ olp_validity_bicep_2
 icc_bicep_2 <- df %>% select(c("Bicep_C","Bicep_US2"))
 icc(icc_bicep_2, model = "twoway", type = "agreement", unit = "average")
 
+cor_bicep_2 <- cor.test(df$Bicep_C,df$Bicep_US2,
+                        method = "pearson",alternative = "two.sided")
+cor_bicep_2
 
 ###############iliac crest 1 ########################
 
@@ -523,8 +541,8 @@ ggsave("Iliac_BA_LR_1.png")
 OLP_plot_iliac_1 <- plot_pair_OLP(
   predictor = df$iliac_Crest_C,
   outcome = df$iliac_Crest_US1,
-  predictor_label = "Skinfold iliac crest 1",
-  outcome_label = "Ultrasound iliac crest",
+  predictor_label = "Skinfold iliac crest",
+  outcome_label = "Ultrasound iliac crest 1",
   SESOI_lower = -2.5,
   SESOI_upper = 2.5)
 OLP_plot_iliac_1
@@ -577,7 +595,9 @@ olp_validity_iliac_1
 icc_iliac_1 <- df %>% select(c("iliac_Crest_C","iliac_Crest_US1"))
 icc(icc_iliac_1, model = "twoway", type = "agreement", unit = "average")
 
-
+cor_iliac_1 <- cor.test(df$iliac_Crest_C,df$iliac_Crest_US1,
+                        method = "pearson",alternative = "two.sided")
+cor_iliac_1
 ###############iliac crest 2 ########################
 
 ## BLAND ALTMAN basic
@@ -603,8 +623,8 @@ ggsave("Iliac_BA_LR_2.png")
 OLP_plot_iliac_2 <- plot_pair_OLP(
   predictor = df$iliac_Crest_C,
   outcome = df$iliac_Crest_US2,
-  predictor_label = "Skinfold iliac crest 2",
-  outcome_label = "Ultrasound iliac crest",
+  predictor_label = "Skinfold iliac crest",
+  outcome_label = "Ultrasound iliac crest 2",
   SESOI_lower = -2.5,
   SESOI_upper = 2.5)
 OLP_plot_iliac_1
@@ -657,7 +677,9 @@ olp_validity_iliac_2
 icc_iliac_2 <- df %>% select(c("iliac_Crest_C","iliac_Crest_US2"))
 icc(icc_iliac_2, model = "twoway", type = "agreement", unit = "average")
 
-
+cor_iliac_2 <- cor.test(df$iliac_Crest_C,df$iliac_Crest_US2,
+                        method = "pearson",alternative = "two.sided")
+cor_iliac_2
 
 ###############supraspinale 1 ########################
 
@@ -684,7 +706,7 @@ ggsave("Supra_BA_LR_1.png")
 OLP_plot_supra_1 <- plot_pair_OLP(
   predictor = df$Supraspinale_C,
   outcome = df$Supraspinale_US1,
-  predictor_label = "Skinfold Supra Spinale 1",
+  predictor_label = "Skinfold Supra Spinale",
   outcome_label = "Ultrasound Supra Spinale 1",
   SESOI_lower = -2.5,
   SESOI_upper = 2.5)
@@ -738,6 +760,11 @@ olp_validity_supra_1
 icc_supra_1 <- df %>% select(c("Supraspinale_C","Supraspinale_US1"))
 icc(icc_supra_1, model = "twoway", type = "agreement", unit = "average")
 
+cor_supra_1 <- cor.test(df$Supraspinale_C,df$Supraspinale_US1,
+                        method = "pearson",alternative = "two.sided")
+cor_supra_1
+
+
 ###############supraspinale 2 ########################
 
 ## BLAND ALTMAN basic
@@ -762,8 +789,8 @@ ggsave("Supra_BA_LR_2.png")
 OLP_plot_supra_2 <- plot_pair_OLP(
   predictor = df$Supraspinale_C,
   outcome = df$Supraspinale_US2,
-  predictor_label = "Skinfold Supra Spinale 2",
-  outcome_label = "Ultrasound iSupra Spinale",
+  predictor_label = "Skinfold Supra Spinale",
+  outcome_label = "Ultrasound iSupra Spinale 2",
   SESOI_lower = -2.5,
   SESOI_upper = 2.5)
 OLP_plot_supra_2
@@ -815,6 +842,9 @@ olp_validity_supra_2
 icc_supra_2 <- df %>% select(c("Supraspinale_C","Supraspinale_US2"))
 icc(icc_supra_2, model = "twoway", type = "agreement", unit = "average")
 
+cor_supra_2 <- cor.test(df$Supraspinale_C,df$Supraspinale_US2,
+                        method = "pearson",alternative = "two.sided")
+cor_supra_2
 
 ###############Abdominal 1 ########################
 
@@ -841,8 +871,8 @@ ggsave("Sabdominal_BA_LR_1.png")
 OLP_plot_abdominal_1 <- plot_pair_OLP(
   predictor = df$Abdominal_C,
   outcome = df$Abdominal_US1,
-  predictor_label = "Skinfold Abdominal 1",
-  outcome_label = "Ultrasound Bbdominal",
+  predictor_label = "Skinfold Abdominal",
+  outcome_label = "Ultrasound Bbdominal 1",
   SESOI_lower = -2.5,
   SESOI_upper = 2.5)
 OLP_plot_abdominal_1
@@ -893,6 +923,12 @@ olp_validity_abdominal_1
 icc_abdominal_1 <- df %>% select(c("Abdominal_C","Abdominal_US1"))
 icc(icc_abdominal_1, model = "twoway", type = "agreement", unit = "average")
 
+
+cor_abdominal_1 <- cor.test(df$Abdominal_C,df$Abdominal_US1,
+                        method = "pearson",alternative = "two.sided")
+cor_abdominal_1
+
+
 ###############Abdominal 2 ########################
 
 ## BLAND ALTMAN basic
@@ -917,9 +953,9 @@ ggsave("Sabdominal_BA_LR_2.png")
 #Visual Plot
 OLP_plot_abdominal_2 <- plot_pair_OLP(
   predictor = df$Abdominal_C,
-  outcome = df$Abdominal_US1,
-  predictor_label = "Skinfold Abdominal 2",
-  outcome_label = "Ultrasound Bbdominal",
+  outcome = df$Abdominal_US2,
+  predictor_label = "Skinfold Abdominal",
+  outcome_label = "Ultrasound Abdominal 2",
   SESOI_lower = -2.5,
   SESOI_upper = 2.5)
 OLP_plot_abdominal_2
@@ -972,6 +1008,9 @@ icc_abdominal_2 <- df %>% select(c("Abdominal_C","Abdominal_US2"))
 icc(icc_abdominal_2, model = "twoway", type = "agreement", unit = "average")
 
 
+cor_abdominal_2 <- cor.test(df$Abdominal_C,df$Abdominal_US2,
+                            method = "pearson",alternative = "two.sided")
+cor_abdominal_2
 ####################Front Thigh 1####################################
 
 ## BLAND ALTMAN basic
@@ -997,8 +1036,8 @@ ggsave("FT_BA_LR_1.png")
 OLP_plot_FT_1 <- plot_pair_OLP(
   predictor = df$Front_Thigh_C,
   outcome = df$Front_Thigh_US1,
-  predictor_label = "Skinfold Front Thigh 1",
-  outcome_label = "Ultrasound Front Thigh",
+  predictor_label = "Skinfold Front Thigh",
+  outcome_label = "Ultrasound Front Thigh 1",
   SESOI_lower = -2.5,
   SESOI_upper = 2.5)
 OLP_plot_FT_1
@@ -1051,6 +1090,10 @@ olp_validity_FT_1
 icc_FT_1 <- df %>% select(c("Front_Thigh_C","Front_Thigh_US1"))
 icc(icc_FT_1, model = "twoway", type = "agreement", unit = "average")
 
+cor_FT_1 <- cor.test(df$Front_Thigh_C,df$Front_Thigh_US1,
+                            method = "pearson",alternative = "two.sided")
+cor_FT_1
+
 ####################Front Thigh 2####################################
 
 ## BLAND ALTMAN basic
@@ -1076,8 +1119,8 @@ ggsave("FT_BA_LR_2.png")
 OLP_plot_FT_2 <- plot_pair_OLP(
   predictor = df$Front_Thigh_C,
   outcome = df$Front_Thigh_US2,
-  predictor_label = "Skinfold Front Thigh 2",
-  outcome_label = "Ultrasound Front Thigh",
+  predictor_label = "Skinfold Front Thigh",
+  outcome_label = "Ultrasound Front Thigh 2",
   SESOI_lower = -2.5,
   SESOI_upper = 2.5)
 OLP_plot_FT_2
@@ -1130,6 +1173,12 @@ olp_validity_FT_2
 icc_FT_2 <- df %>% select(c("Front_Thigh_C","Front_Thigh_US2"))
 icc(icc_FT_2, model = "twoway", type = "agreement", unit = "average")
 
+library(psych)
+ICC(icc_FT_2)
+
+cor_FT_2 <- cor.test(df$Front_Thigh_C,df$Front_Thigh_US2,
+                     method = "pearson",alternative = "two.sided")
+cor_FT_2
 ####################Medial Calf 1####################################
 
 ## BLAND ALTMAN basic
@@ -1155,8 +1204,8 @@ ggsave("Calf_BA_LR_1.png")
 OLP_plot_calf_1 <- plot_pair_OLP(
   predictor = df$Medial_Calf_C,
   outcome = df$Medial_Calf_US1,
-  predictor_label = "Skinfold Calf 1",
-  outcome_label = "Ultrasound Calf",
+  predictor_label = "Skinfold Calf",
+  outcome_label = "Ultrasound Calf 1",
   SESOI_lower = -2.5,
   SESOI_upper = 2.5)
 OLP_plot_calf_1
@@ -1210,6 +1259,9 @@ icc_calf_1 <- df %>% select(c("Medial_Calf_C","Medial_Calf_US1"))
 icc(icc_calf_1, model = "twoway", type = "agreement", unit = "average")
 
 
+cor_calf_1 <- cor.test(df$Medial_Calf_C,df$Medial_Calf_US1,
+                     method = "pearson",alternative = "two.sided")
+cor_calf_1
 ####################Medial Calf 2####################################
 
 ## BLAND ALTMAN basic
@@ -1234,9 +1286,9 @@ ggsave("Calf_BA_LR_2.png")
 #Visual Plot
 OLP_plot_calf_2 <- plot_pair_OLP(
   predictor = df$Medial_Calf_C,
-  outcome = df$Medial_Calf_US1,
-  predictor_label = "Skinfold Calf 2",
-  outcome_label = "Ultrasound Calf",
+  outcome = df$Medial_Calf_US2,
+  predictor_label = "Skinfold Calf",
+  outcome_label = "Ultrasound Calf 2",
   SESOI_lower = -2.5,
   SESOI_upper = 2.5)
 OLP_plot_calf_2
@@ -1288,3 +1340,30 @@ olp_validity_calf_2
 ## Intra class correlation
 icc_calf_2 <- df %>% select(c("Medial_Calf_C","Medial_Calf_US2"))
 icc(icc_calf_2, model = "twoway", type = "agreement", unit = "average")
+
+
+cor_calf_2 <- cor.test(df$Medial_Calf_C,df$Medial_Calf_US1,
+                       method = "pearson",alternative = "two.sided")
+cor_calf_2
+
+
+## PLOT OF BLAND ALTMAN
+library(ggpubr)
+BA_All <- ggarrange(BA_triceps_1,BA_Triceps_2, BA_subscapular_1,
+                           BA_subscapular_2, BA_bicep_1,BA_bicep_2,
+                           BA_iliac_1,BA_iliac_2,BA_supra_1,BA_supra_2,
+                           BA_abdominal_1,BA_abdominal_2,BA_FT_1,BA_FT_2,
+                           BA_calf_1,BA_calf_2, ncol=4,nrow=4,
+                           labels = c("A","B", "C", "D","E","F","G","H","I","J",
+                                      "K","L","M","N","O","P"),
+                           label.y = 1.03)
+ggsave("BA_ALL.png")
+
+
+OLP_plot_suball <- ggarrange(OLP_plot_supra_1,OLP_plot_bicep_1,OLP_plot_triceps_1,
+                    OLP_plot_Subscapular_1, ncol=2,nrow=2,
+                    labels = c("1","2", "3", "4"),
+                    label.y = 0.3)
+OLP_plot_suball
+ggsave("OLP_plot_suball.png")
+
