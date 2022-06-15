@@ -24,6 +24,7 @@ Female <- df %>% filter(Sex == "Female")
 ## BLAND ALTMAN basic
 BA_triceps_1 <- bland.altman.plot(Triceps_US1, Triceps_C,
                                   graph.sys="ggplot2") + theme_classic()
+
 BA_triceps_1
 ggsave("Triceps_BA_Basic_1.png")
 
@@ -38,62 +39,7 @@ BA_LR_triceps_1 <- plot_pair_BA(
 BA_LR_triceps_1
 ggsave("Triceps_BA_LR_1.png")
 
-## OLP Validity
-
-#Visual Plot
-OLP_plot_triceps_1 <- plot_pair_OLP(
-  predictor = df$Triceps_C,
-  outcome = df$Triceps_US1,
-  predictor_label = "Skinfold Triceps",
-  outcome_label = "Ultrasound Triceps 1",
-  SESOI_lower = -2.5,
-  SESOI_upper = 2.5)
-OLP_plot_triceps_1
-ggsave("US_SF_Triceps_1.png")
-
-olp_method_triceps_1 <- function(data=df,
-                       criterion=Triceps_C,
-                       practical=Triceps_US1,
-                       SESOI_lower = 0,
-                       SESOI_upper = 0,
-                       na.rm = FALSE) {
-  practical_obs <- data[[practical]]
-  criterion_obs <- data[[criterion]]
-  SESOI_range <- SESOI_upper - SESOI_lower
-
-  olp_model <- bmbstats::OLP_regression(
-    outcome = criterion_obs,
-    predictor = practical_obs,
-    na.rm = na.rm)
-
-  n_obs <- length(criterion_obs)
-
-  intercept <- olp_model$intercept
-  slope <- olp_model$slope
-  rse <- olp_model$rse
-
-  PPER <- stats::pt((SESOI_upper) / rse, df = n_obs - 1) -
-    stats::pt((SESOI_lower) / rse, df = n_obs - 1)
-
-  c("Intercept" = intercept,
-    "Slope" = slope,
-    "RSE" = rse,
-    PPER = PPER,
-    SDC = rse * 1.96)
-}
-
-
-olp_validity_triceps_1 <- validity_analysis(
-  data = df,
-  criterion = "Triceps_US1",
-  practical = "Triceps_C",
-  SESOI_lower = -2.5,
-  SESOI_upper = 2.5,
-  estimator_function = olp_method_triceps_1,
-  control = model_control(boot_samples = 1000,seed = 1667))
-olp_validity_triceps_1
-
-
+#
 ## Intra class correlation
 icc_triceps_1 <- df %>% select(c("Triceps_C","Triceps_US1"))
 icc(icc_triceps_1, model = "twoway", type = "agreement", unit = "average")
@@ -1357,6 +1303,7 @@ BA_All <- ggarrange(BA_triceps_1,BA_Triceps_2, BA_subscapular_1,
                            labels = c("A","B", "C", "D","E","F","G","H","I","J",
                                       "K","L","M","N","O","P"),
                            label.y = 1.03)
+
 ggsave("BA_ALL.png")
 
 

@@ -4,14 +4,13 @@ df <- read_excel("~/R/Ultrasound_validity/US_SF.xlsx",
 View(df)
 attach(df)
 
-View(df)
-attach(df)
-
 ## Required libraries
 library(dplyr)
 library(blandr)
 library(ggplot2)
 library(irr)
+library(rstatix)
+library(ggpubr)
 
 ## recode data
 df <-df %>%
@@ -22,12 +21,14 @@ Male <- df %>% filter(Sex == "Male")
 Female <- df %>% filter(Sex == "Female")
 
 ####################TRICEPS ####################################
-
 Triceps_lm = lm(Triceps_C ~ Triceps_US2, data = df)
 Triceps_summary  <- summary(Triceps_lm)
 Triceps_summary
 
 Triceps_predicted <- Triceps_summary$coefficients[1,1] +
+  (Triceps_US2*Triceps_summary$coefficients[2,1])
+
+Triceps_predicted_alt <- Triceps_summary$coefficients[1,1] +
   (Triceps_US2*Triceps_summary$coefficients[2,1])
 
 df <- df %>% mutate(Triceps_predicted = Triceps_predicted)
@@ -216,7 +217,6 @@ BA_plot_calf_application <- blandr.draw(calf_predicted,Medial_Calf_C, sig.level 
                                       plotTitle="",ciDisplay = FALSE) +theme_bw()
 BA_plot_calf_application
 
-
 ######################## * 2 ###########################################
 ####################TRICEPS *2 ####################################
 
@@ -334,7 +334,7 @@ BA_plot_abdominal2_application <- blandr.draw(`Abdominal_*2`,Abdominal_C, sig.le
                                              plotTitle="",ciDisplay = FALSE) +theme_bw()
 BA_plot_abdominal2_application
 
-######################### Front Thigh ################################
+######################### Front Thigh 2 ################################
 
 FT2_lm = lm(Front_Thigh_C ~ `Front_Thigh_*2`, data = df)
 FT2_summary  <- summary(FT2_lm)
@@ -354,7 +354,7 @@ BA_plot_FT2_application <- blandr.draw(`Front_Thigh_*2`,Front_Thigh_C, sig.level
 BA_plot_FT2_application
 
 
-##########################CALF ######################################
+##########################CALF 2 ######################################
 
 calf2_lm = lm(Medial_Calf_C ~ `Medial Calf_*2`, data = df)
 calf2_summary  <- summary(calf2_lm)
@@ -369,191 +369,115 @@ BA_stats_calf2_application <- blandr.statistics(`Medial Calf_*2`,
                                                Medial_Calf_C, sig.level=0.95 )
 summary(BA_stats_calf2_application)
 
-BA_plot_calf_application <- blandr.draw(`Medial Calf_*2`,Medial_Calf_C, sig.level = 0.95,
+BA_plot_calf2_application <- blandr.draw(`Medial Calf_*2`,Medial_Calf_C, sig.level = 0.95,
                                         plotTitle="",ciDisplay = FALSE) +theme_bw()
-BA_plot_calf_application
+BA_plot_calf2_application
 
 
-####################TRICEPS PT FORMULA####################################
-triceps_pt_lm = lm(Triceps_US2 ~ Triceps_C, data = df)
-triceps_pt_summary  <- summary(triceps_pt_lm)
-triceps_pt_summary
-
-Triceps_pt_predicted <- (Triceps_US2/triceps_pt_summary$coefficients[2,1]) -
-  triceps_pt_summary$coefficients[1,1]
-
-cor(Triceps_C,Triceps_pt_predicted)
-
-icc_Triceps_application <- data_frame(Triceps_pt_predicted,Triceps_C)
-icc(icc_Triceps_application, model = "twoway", type = "agreement", unit = "average")
-
-BA_stats_pt_triceps_application <- blandr.statistics(Triceps_pt_predicted,
-                                                  Triceps_C, sig.level=0.95 )
-summary(BA_stats_pt_triceps_application)
-
-BA_plot_pt_triceps_application <- blandr.draw(Triceps_pt_predicted,Triceps_C, sig.level = 0.95,
-                                           plotTitle="",ciDisplay = FALSE) +theme_bw()
-BA_plot_pt_triceps_application
-
-############################SUBSCAPULAR PT FORMULA#################################
-
-Subscapular_pt_lm = lm(Subscapular_US2 ~ Subscapular_C, data = df)
-Subscapular_pt_summary  <- summary(Subscapular_pt_lm)
-Subscapular_pt_summary
-
-Subscapular_pt_predicted <- (Subscapular_US2/Subscapular_pt_summary$coefficients[2,1]) -
-  Subscapular_pt_summary$coefficients[1,1]
-
-cor(Subscapular_C,Subscapular_pt_predicted)
-
-icc_subscapular_pt_application <- data_frame(Subscapular_pt_predicted,Subscapular_C)
-icc(icc_subscapular_pt_application, model = "twoway", type = "agreement", unit = "average")
-
-BA_stats_subscapular_pt_application <- blandr.statistics(Subscapular_pt_predicted,
-                                                      Subscapular_C, sig.level=0.95 )
-summary(BA_stats_subscapular_pt_application)
-
-BA_plot_subscapular_pt_application <- blandr.draw(Subscapular_pt_predicted,Subscapular_C, sig.level = 0.95,
-                                               plotTitle="",ciDisplay = FALSE) +theme_bw()
-BA_plot_subscapular_pt_application
-
-#############################BICEPS PT FORMULA #######################################
-
-Biceps_pt_lm = lm(Bicep_US2 ~ Bicep_C, data = df)
-Biceps_pt_summary  <- summary(Biceps_pt_lm)
-Biceps_pt_summary
-
-Biceps_pt_predicted <- (Bicep_US2/Biceps_pt_summary$coefficients[2,1]) -
-  Biceps_pt_summary$coefficients[1,1]
-
-cor(Bicep_C,Biceps_pt_predicted)
-
-icc_biceps_pt_application <- data_frame(Biceps_pt_predicted,Bicep_C)
-icc(icc_biceps_pt_application, model = "twoway", type = "agreement", unit = "average")
-
-BA_stats_pt_biceps_application <- blandr.statistics(Biceps_pt_predicted,
-                                                      Bicep_C, sig.level=0.95 )
-summary(BA_stats_pt_subscapular_application)
-
-BA_plot_pt_biceps_application <- blandr.draw(Biceps_pt_predicted,Bicep_C, sig.level = 0.95,
-                                               plotTitle="",ciDisplay = FALSE) +theme_bw()
-BA_plot_pt_biceps_application
-
-############################Iliac crest PT FORMULA#################################
-
-Iliac_pt_lm = lm(iliac_Crest_US2 ~ iliac_Crest_C, data = df)
-Iliac_pt_summary  <- summary(Iliac_pt_lm)
-Iliac_pt_summary
-
-Iliac_pt_predicted <- (iliac_Crest_US2/Iliac_pt_summary$coefficients[2,1]) -
-  Iliac_pt_summary$coefficients[1,1]
-
-cor(iliac_Crest_C,Iliac_pt_predicted)
-
-icc_iliac_application <- data_frame(Iliac_pt_predicted,iliac_Crest_C)
-icc(icc_iliac_application, model = "twoway", type = "agreement", unit = "average")
+## PLOT OF BLAND ALTMAN of All
+library(ggpubr)
+BA_ALL_APPLICATION <- ggarrange(BA_plot_triceps_application,BA_plot_triceps2_application,
+                    BA_plot_subscapular_application,BA_plot_subscapular_application,
+                    BA_plot_bicep_application, BA_plot_biceps2_application,
+                    BA_plot_iliac_application,BA_plot_iliac2_application,
+                    BA_plot_supra_application,BA_plot_supra2_application,
+                    BA_plot_abdominal_application,BA_plot_abdominal2_application,
+                    BA_plot_FT_application,BA_plot_FT2_application,
+                    BA_plot_calf_application,BA_plot_calf2_application,
+                    ncol=4,nrow=4,
+                    labels = c("A","B", "C", "D","E","F","G","H","I","J",
+                               "K","L","M","N","O","P"),
+                    label.y = 1.03)
+ggsave("BA_ALL_APPLICATION.png")
 
 
-BA_stats_pt_iliac_application <- blandr.statistics(Iliac_pt_predicted,
-                                                iliac_Crest_C, sig.level=0.95 )
-summary(BA_stats_pt_iliac_application)
 
-BA_plot_pt_iliac_application <- blandr.draw(Iliac_pt_predicted,iliac_Crest_C, sig.level = 0.95,
-                                         plotTitle="",ciDisplay = FALSE) +theme_bw()
-BA_plot_pt_iliac_application
-
-###########################Supraspinale PT FORMULA ####################################
-
-supra_pt_lm = lm(Supraspinale_US2 ~ Supraspinale_C, data = df)
-supra_pt_summary  <- summary(supra_pt_lm)
-supra_pt_summary
-
-supra_pt_predicted <- (Supraspinale_US2/supra_pt_summary$coefficients[2,1]) -
-  supra_pt_summary$coefficients[1,1]
-
-Iliac_pt_predicted <- (iliac_Crest_US2/Iliac_summary$coefficients[2,1]) -
-  Iliac_summary$coefficients[1,1]
-
-cor(Supraspinale_C,supra_pt_predicted)
-
-icc_supra_application <- data_frame(supra_pt_predicted,Supraspinale_C)
-icc(icc_supra_application, model = "twoway", type = "agreement", unit = "average")
-
-BA_stats_supra_application <- blandr.statistics(supra_pt_predicted,
-                                                Supraspinale_C, sig.level=0.95 )
-summary(BA_stats_supra_application)
-
-BA_plot_supra_application <- blandr.draw(supra_pt_predicted,Supraspinale_C, sig.level = 0.95,
-                                         plotTitle="",ciDisplay = FALSE) +theme_bw()
-BA_plot_supra_application
-
-#######################ABDOMINAL PT FORMULA #####################################
-abdominal_pt_lm = lm(Abdominal_US2~Abdominal_C, data = df)
-abdominal_pt_summary  <- summary(abdominal_pt_lm)
-abdominal_pt_summary
-
-abdominal_pt_predicted <-  (Abdominal_US2/abdominal_summary$coefficients[2,1]) -
-  abdominal_summary$coefficients[1,1]
-
-cor(Abdominal_C,abdominal_pt_predicted)
-
-icc_abdominal_application <- data_frame(abdominal_pt_predicted,Abdominal_C)
-icc(icc_abdominal_application, model = "twoway", type = "agreement", unit = "average")
-
-BA_stats_abdominal_pt_application <- blandr.statistics(abdominal_pt_predicted,
-                                                Abdominal_C, sig.level=0.95 )
-summary(BA_stats_abdominal_pt_application)
-
-BA_plot_pt_abdominal_application <- blandr.draw(abdominal_pt_predicted,Abdominal_C, sig.level = 0.95,
-                                             plotTitle="",ciDisplay = FALSE) +theme_bw()
-BA_plot_pt_abdominal_application
-
-######################### Front Thigh PT FORMULA ################################
-
-FT_pt_lm = lm(Front_Thigh_US2 ~ Front_Thigh_C, data = df)
-FT_pt_summary  <- summary(FT_pt_lm)
-FT_pt_summary
-
-FT_pt_predicted <- (Front_Thigh_US2/FT_pt_summary$coefficients[2,1]) -
-  FT_pt_summary$coefficients[1,1]
-
-cor(Front_Thigh_C,FT_pt_predicted)
-
-icc_FT_pt_application <- data_frame(FT_pt_predicted,Front_Thigh_C)
-icc(icc_FT_pt_application, model = "twoway", type = "agreement", unit = "average")
-
-BA_stats_FT_application <- blandr.statistics(FT_pt_predicted,
-                                             Front_Thigh_C, sig.level=0.95 )
-summary(BA_stats_FT_application)
-
-BA_plot_FT_application <- blandr.draw(FT_pt_predicted,Front_Thigh_C, sig.level = 0.95,
-                                      plotTitle="",ciDisplay = FALSE) +theme_bw()
-BA_plot_FT_application
-
-##########################CALF PT FORMULA ######################################
-
-calf_pt_lm = lm(Medial_Calf_US2 ~ Medial_Calf_C, data = df)
-calf_pt_summary  <- summary(calf_pt_lm)
-calf_pt_summary
-
-calf_pt_predicted <- (Medial_Calf_US2/calf_pt_summary$coefficients[2,1]) -
-  calf_pt_summary$coefficients[1,1]
-
-cor(Medial_Calf_C,calf_pt_predicted)
-
-icc_calf_pt_application <- data_frame(calf_pt_predicted,Medial_Calf_C)
-icc(icc_calf_pt_application, model = "twoway", type = "agreement", unit = "average")
-
-BA_stats_calf_pt_application <- blandr.statistics(calf_pt_predicted,
-                                               Medial_Calf_C, sig.level=0.95 )
-summary(BA_stats_calf_pt_application)
-
-BA_plot_calf_pt_application <- blandr.draw(calf_pt_predicted,Medial_Calf_C, sig.level = 0.95,
-                                        plotTitle="",ciDisplay = FALSE) +theme_bw()
-BA_plot_calf_pt_application
-
-
+#####################VALIDATION#######################################
 
 library("openxlsx")
 write.xlsx(df, file = "US_SF_new.xlsx",
            sheetName = "Regressions", append = FALSE)
+
+#############ADIPOSE #######################################
+library(readxl)
+df <- read_excel("~/R/Ultrasound_validity/US_SF.xlsx",
+                 sheet = "Application")
+View(df)
+attach(df)
+
+Adipose_lm = lm(Adipose_Mass ~ Adipose_Mass_LM_Formula, data = df)
+Adipose_summary  <- summary(Adipose_lm)
+Adipose_summary
+
+cor(Adipose_Mass,Adipose_Mass_LM_Formula)
+
+icc_adipose_application <- data_frame(Adipose_Mass_LM_Formula,Adipose_Mass)
+icc(icc_adipose_application, model = "twoway", type = "agreement", unit = "average")
+
+
+BA_stats_adipose_application <- blandr.statistics(Adipose_Mass_LM_Formula,
+                                                  Adipose_Mass, sig.level=0.95 )
+summary(BA_stats_adipose_application)
+
+BA_plot_adipose_application <- blandr.draw(Adipose_Mass,Adipose_Mass_LM_Formula, sig.level = 0.95,
+                                           plotTitle="",ciDisplay = FALSE) +theme_bw()
+BA_plot_adipose_application
+
+## Adipose mass *2
+
+Adipose2 = lm(Adipose_Mass ~ `Adipose_Mass*2`, data = df)
+Adipose2_summary  <- summary(Adipose2)
+Adipose2_summary
+
+cor(Adipose_Mass,`Adipose_Mass*2`)
+
+icc_adipose2_application <- data_frame(`Adipose_Mass*2`,Adipose_Mass)
+icc(icc_adipose2_application, model = "twoway", type = "agreement", unit = "average")
+
+BA_stats_adipose2_application <- blandr.statistics(`Adipose_Mass*2`,
+                                                  Adipose_Mass, sig.level=0.95 )
+summary(BA_stats_adipose2_application)
+
+BA_plot_adipose2_application <- blandr.draw(Adipose_Mass,`Adipose_Mass*2`, sig.level = 0.95,
+                                           plotTitle="",ciDisplay = FALSE) +theme_bw()
+BA_plot_adipose2_application
+
+## Muscle Mass
+Muscle_Mass_lm = lm(Muscle_Mass ~ Muscle_Mass_LM_Formula, data = df)
+Muscle_Mass_lm_summary  <- summary(Muscle_Mass_lm)
+Muscle_Mass_lm_summary
+
+cor(Muscle_Mass,Muscle_Mass_LM_Formula)
+
+icc_muscle_application <- data_frame(Muscle_Mass_LM_Formula,Muscle_Mass)
+icc(icc_muscle_application, model = "twoway", type = "agreement", unit = "average")
+
+
+BA_stats_muscle_application <- blandr.statistics(Muscle_Mass_LM_Formula,
+                                                  Muscle_Mass, sig.level=0.95 )
+summary(BA_stats_muscle_application)
+
+BA_plot_muscle_application <- blandr.draw(Muscle_Mass,Muscle_Mass_LM_Formula, sig.level = 0.95,
+                                           plotTitle="",ciDisplay = FALSE) +theme_bw()
+BA_plot_muscle_application
+
+##Muscle mass * 2
+Muscle_Mass2 = lm(Muscle_Mass~ `Muscle_Mass*2`, data = df)
+Muscle_Mass2_summary  <- summary(Muscle_Mass2)
+Muscle_Mass2_summary
+
+cor(Muscle_Mass,`Muscle_Mass*2`)
+
+icc_muscle2_application <- data_frame(`Muscle_Mass*2`,Muscle_Mass)
+icc(icc_muscle2_application, model = "twoway", type = "agreement", unit = "average")
+
+
+BA_stats_muscle2_application <- blandr.statistics(`Muscle_Mass*2`,
+                                                  Muscle_Mass, sig.level=0.95 )
+summary(BA_stats_muscle2_application)
+
+BA_plot_muscle2_application <- blandr.draw(Muscle_Mass,`Muscle_Mass*2`, sig.level = 0.95,
+                                           plotTitle="",ciDisplay = FALSE) +theme_bw()
+BA_plot_muscle2_application
+
+
